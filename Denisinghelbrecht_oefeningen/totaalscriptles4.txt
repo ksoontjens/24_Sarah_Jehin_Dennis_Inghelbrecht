@@ -1,0 +1,96 @@
+package hellotvxlet;
+
+import java.awt.Color;
+import java.awt.event.ActionEvent;
+import javax.tv.xlet.*;
+import org.dvb.ui.DVBColor;
+import org.havi.ui.HScene;
+import org.havi.ui.HSceneFactory;
+import org.havi.ui.HStaticText;
+import org.havi.ui.HTextButton;
+import org.havi.ui.HVisible;
+import org.havi.ui.event.HActionListener;
+
+
+public class HelloTVXlet implements Xlet, HActionListener {
+
+    HScene scene;
+    
+    public void destroyXlet(boolean unconditional) throws XletStateChangeException {
+      
+    }
+
+    public void initXlet(XletContext ctx) throws XletStateChangeException {
+        
+        scene = HSceneFactory.getInstance().getDefaultHScene();
+    }
+
+    public void pauseXlet() {
+        
+    }
+
+    public void startXlet() throws XletStateChangeException {
+                                                          //x, y, breedte, hoogte
+        HStaticText label1 = new HStaticText("Wie was de eerste president van de VS?", 50, 300, 600, 50);
+        label1.setBackground(new DVBColor(0, 0, 255, 127));
+        label1.setBackgroundMode(HVisible.BACKGROUND_FILL);
+        
+        HTextButton button1 = new HTextButton("George Washington", 50, 370, 300, 50);
+        button1.setBackground(new DVBColor(0, 0, 255, 127));
+        button1.setBackgroundMode(HVisible.BACKGROUND_FILL);
+        button1.setActionCommand("button1klik");
+        button1.addHActionListener(this); //voeg HActionListener toe bij implements (boven)
+        
+        HTextButton button2 = new HTextButton("Bill Clinton", 50, 440, 300, 50);
+        button2.setBackground(new DVBColor(0, 0, 255, 127));
+        button2.setBackgroundMode(HVisible.BACKGROUND_FILL);
+        button2.setActionCommand("button2klik");
+        button2.addHActionListener(this); //voeg HActionListener toe bij implements (boven)
+        
+        HTextButton button3 = new HTextButton("Ronald Reagan", 370, 370, 300, 50);
+        button3.setBackground(new DVBColor(0, 0, 255, 127));
+        button3.setBackgroundMode(HVisible.BACKGROUND_FILL);
+        button3.setActionCommand("button3klik");
+        button3.addHActionListener(this); //voeg HActionListener toe bij implements (boven)
+        
+        HTextButton button4 = new HTextButton("Jimmy Carter", 370, 440, 300, 50);
+        button4.setBackground(new DVBColor(0, 0, 255, 127));
+        button4.setBackgroundMode(HVisible.BACKGROUND_FILL);
+        button4.setActionCommand("button4klik");
+        button4.addHActionListener(this); //voeg HActionListener toe bij implements (boven)
+        
+                                //up,    down,   left, right
+        button1.setFocusTraversal(null, button2, null, button3);
+        button2.setFocusTraversal(button1, null, null, button4);
+        button3.setFocusTraversal(null, button4, button1, null);
+        button4.setFocusTraversal(button3, null, button2, null);
+        
+        scene.add(button4);
+        scene.add(button3);
+        scene.add(button2);
+        scene.add(button1);
+        scene.add(label1);
+        scene.validate();
+        scene.setVisible(true);
+        button1.requestFocus();
+        
+        
+        
+    }
+
+    public void actionPerformed(ActionEvent event) {
+        System.out.println(event.getActionCommand()); //string ophalen en tonen
+        if(event.getActionCommand().equals("button1klik")) {
+            //als je dan op button2 klikt wordt alles verborgen
+            //scene.setVisible(false);
+            HStaticText result = new HStaticText("Goed!", 720/2-100, 100, 200, 100);
+            result.setBackground(Color.GREEN);
+            result.setBackgroundMode(HVisible.BACKGROUND_FILL);
+            scene.add(result);
+            scene.repaint();
+        }
+    }
+
+  
+    
+}
